@@ -4,7 +4,8 @@ module.exports = {
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname,'dist'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    publicPath: 'dist/'
   },
   module: {
     rules: [
@@ -29,7 +30,36 @@ module.exports = {
         }, {
             loader: "less-loader" // compiles Less to CSS
         }]
+      },
+      {
+        test: /\.(png|jpg|gif|jpeg)$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 103000,
+              name: 'img/[name].[hash:8].[ext]'
+            }
+          }
+        ]
+      },
+      {
+        test: /\.js$/,
+        //exclude 排除
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['es2015']
+          }
+        }
       }
     ]
+  },
+  resolve: {
+    //alias 别名
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js'
+    }
   }
 }
